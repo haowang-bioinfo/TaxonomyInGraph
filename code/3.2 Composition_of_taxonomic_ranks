@@ -1,0 +1,9 @@
+## Cypher to Generate count of ranks
+with "MATCH (n) WHERE EXISTS(n.rank) RETURN DISTINCT  
+n.rank AS rank, count(n.rank) as number_of_nodes  
+order by number_of_nodes desc 
+UNION ALL MATCH ()-[r]-() WHERE EXISTS(r.rank) 
+RETURN DISTINCT  r.rank AS rank, count(r.rank) as number_of_nodes" AS query 
+call apoc.export.csv.query(query, "rankcount.csv", {})
+yield file,source,format, nodes, relationships,properties
+return file,source,format, nodes, relationships,properties;
